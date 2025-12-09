@@ -1,0 +1,165 @@
+/*
+  MusicSchool Colombia — Design System
+  ------------------------------------------------
+  - Colores, tipografías, espaciados, sombras y radios
+  - Componentes: header, nav, hero, botones, cards, secciones
+  - Responsive: mobile-first con breakpoints a 480px, 768px, 1024px
+*/
+
+/* Google Fonts (sugerencia: incluir en HTML) */
+/* Ejemplo en <head>:
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+*/
+
+:root {
+  /* Colors */
+  --primary-50: #e6f0ff;
+  --primary-100: #cce0ff;
+  --primary-200: #99c2ff;
+  --primary-300: #66a3ff;
+  --primary-400: #3385ff;
+  --primary-500: #0066ff;  /* base */
+  --primary-600: #0052cc;
+  --primary-700: #003d99;
+  --primary-800: #002966;
+  --primary-900: #001433;
+
+  --accent-500: #ffb703;
+  --accent-600: #f29f05;
+  --accent-700: #e08700;
+
+  --bg-50: #f7f9fc;
+  --bg-100: #f0f4f8;
+  --bg-900: #0f172a; /* footer */
+
+  --text-900: #0b1324;
+  --text-700: #283044;
+  --text-500: #5b6b88;
+  --white: #ffffff;
+
+  /* Effects */
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-md: 0 6px 20px rgba(16, 24, 40, 0.10);
+  --shadow-lg: 0 14px 40px rgba(2, 6, 23, 0.12);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  /* Sizing */
+  --container: 1200px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+}
+
+/* Reset y tipografías */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-900);
+  background: var(--bg-50);
+  line-height: 1.6;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+.container { max-width: var(--container); margin: 0 auto; padding: 0 var(--space-6); }
+.section { padding: var(--space-16) 0; }
+.section-sm { padding: var(--space-10) 0; }
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0; z-index: 50;
+  background: linear-gradient(90deg, #134e5e 0%, #207a8a 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.header__inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: var(--space-4); font-weight: 700; font-family: Poppins, Inter, sans-serif; }
+.brand__logo { width: 28px; height: 28px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2)); }
+.nav { display: flex; align-items: center; gap: var(--space-6); }
+.nav a { opacity: 0.9; font-weight: 600; }
+.nav a:hover, .nav a.active { opacity: 1; text-underline-offset: 6px; text-decoration: underline; }
+
+/* Hero */
+.hero {
+  background: radial-gradient(1000px 400px at 50% -100px, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),
+              linear-gradient(180deg, #1b5a6b 0%, #1a5261 100%);
+  color: var(--white);
+  padding: var(--space-20) 0 var(--space-16);
+  position: relative;
+  overflow: hidden;
+}
+.hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); align-items: center; }
+.hero h1 { font-family: Poppins, Inter, sans-serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.2; margin: 0 0 var(--space-4); }
+.hero p { opacity: 0.95; margin: 0 0 var(--space-8); font-size: clamp(14px, 2.2vw, 18px); }
+.hero__cta { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+
+/* Botones */
+.btn { display: inline-flex; align-items: center; gap: 10px; border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 700; cursor: pointer; transition: all .2s ease; }
+.btn--primary { background: var(--accent-500); color: #202020; box-shadow: var(--shadow-md); }
+.btn--primary:hover { background: var(--accent-600); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.btn--ghost { background: rgba(255,255,255,0.12); color: var(--white); border: 1px solid rgba(255,255,255,0.3); }
+.btn--ghost:hover { background: rgba(255,255,255,0.2); }
+
+/* Beneficios */
+.benefits { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: var(--space-6); }
+.benefit { background: var(--white); border-radius: var(--radius-md); padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid #e5eef7; }
+.benefit h3 { margin: 0 0 var(--space-2); font-size: 18px; }
+.benefit p { margin: 0; color: var(--text-500); }
+
+/* Cursos (cards) */
+.courses__header { display: flex; align-items: end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+.courses__grid { display: grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap: var(--space-6); }
+.card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid #eaf1fb; display: flex; flex-direction: column; }
+.card__thumb { position: relative; aspect-ratio: 16/9; background: linear-gradient(135deg, #e8eef7, #f6f9ff); }
+.card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.badge { position: absolute; top: 12px; left: 12px; background: var(--accent-500); color: #222; font-weight: 800; padding: 6px 10px; border-radius: 999px; font-size: 12px; box-shadow: var(--shadow-sm); }
+.card__body { padding: var(--space-5); display: grid; gap: var(--space-3); }
+.card__title { font-weight: 700; font-size: 18px; margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; color: var(--text-500); font-size: 13px; }
+.price { display: inline-flex; align-items: baseline; gap: 8px; }
+.price .old { color: #a0aec0; text-decoration: line-through; font-weight: 600; }
+.price .now { color: #1f2937; font-weight: 800; }
+
+/* Testimonios */
+.testimonials { display: grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap: var(--space-6); }
+.testimonial { background: var(--white); border-radius: var(--radius-md); padding: var(--space-6); box-shadow: var(--shadow-sm); border: 1px solid #e5eef7; }
+.stars { color: #fbbf24; letter-spacing: 2px; }
+
+/* Footer */
+.footer { background: var(--bg-900); color: #cbd5e1; }
+.footer__inner { display: grid; grid-template-columns: 1fr; gap: var(--space-8); padding: var(--space-12) 0; }
+.footer__bottom { border-top: 1px solid #1f2937; padding: var(--space-6) 0; text-align: center; color: #94a3b8; }
+
+/* Utilities */
+.hidden { display: none !important; }
+.center { text-align: center; }
+
+/* Responsive */
+@media (min-width: 480px) {
+  .benefits { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .courses__grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .testimonials { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (min-width: 768px) {
+  .hero__grid { grid-template-columns: 1.1fr 0.9fr; }
+}
+@media (min-width: 1024px) {
+  .benefits { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .courses__grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}

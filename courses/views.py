@@ -8,9 +8,11 @@ from .serializers import CourseSerializer, LessonSerializer
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.filter(is_active=True)
     serializer_class = CourseSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['category', 'course_type', 'level', 'instructor', 'is_active']
     search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'price', 'rating']
+    ordering = ['-created_at']
     
     @action(detail=True, methods=['get'])
     def lessons(self, request, pk=None):
