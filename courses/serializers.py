@@ -1,0 +1,22 @@
+from rest_framework import serializers
+from .models import Course, Lesson
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ['id', 'title', 'description', 'order', 'duration_minutes', 'video_url']
+
+class CourseSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True)
+    instructor_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'description', 'instructor_name', 'category', 
+            'course_type', 'level', 'price', 'discount_percentage', 
+            'duration_weeks', 'total_lessons', 'rating', 'schedule', 'lessons'
+        ]
+    
+    def get_instructor_name(self, obj):
+        return obj.instructor.user.get_full_name() or obj.instructor.user.username

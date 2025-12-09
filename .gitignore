@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+*.so
+*.egg-info/
+*.egg
+
+# Virtual env
+venv/
+.env
+.env.*
+
+# Django
+*.log
+*.pot
+*.py,cover
+local_settings.py
+staticfiles/
+media/
+
+# SQLite DB
+*.sqlite3
+
+# IDEs/Editors
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Tests/coverage
+.coverage
+.coverage.*
+.tox/
+.nox/
+.pytest_cache/
+htmlcov/
+
+# Node (por si usas frontend dentro del repo)
+node_modules/

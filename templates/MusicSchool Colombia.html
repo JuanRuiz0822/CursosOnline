@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MusicSchool Colombia</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>MusicSchool Colombia</h1>
+    <nav>
+      <a href="/">Inicio</a>
+      <a href="/admin/">Admin</a>
+      <a href="/api/">API</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Bienvenido</h2>
+      <p>Plataforma de cursos de música en Colombia.</p>
+    </section>
+
+    <section>
+      <h2>Cursos recientes</h2>
+      <div id="courses"></div>
+    </section>
+  </main>
+
+  <script>
+    // Ejemplo simple: consumir la API de cursos
+    fetch('/api/courses/')
+      .then(r => r.json())
+      .then(data => {
+        const cont = document.getElementById('courses');
+        if (!Array.isArray(data) || data.length === 0) {
+          cont.textContent = 'No hay cursos disponibles aún.';
+          return;
+        }
+        const ul = document.createElement('ul');
+        data.forEach(c => {
+          const li = document.createElement('li');
+          li.textContent = `${c.title} - Nivel: ${c.level} - Precio: ${c.price}`;
+          ul.appendChild(li);
+        });
+        cont.appendChild(ul);
+      })
+      .catch(() => {
+        const cont = document.getElementById('courses');
+        cont.textContent = 'Error cargando cursos.';
+      });
+  </script>
+</body>
+</html>
