@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <!-- Estilos globales -->
-  <link rel="stylesheet" href="/static/styles.css" />
+  <!-- Estilos globales: forzar recarga con versionado -->
+  <link rel="stylesheet" href="/static/styles.css?v=1" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎵</text></svg>">
 </head>
 <body>
@@ -150,25 +150,25 @@
 
     function courseCard(course) {
       const hasDiscount = (course.discount_percentage || 0) > 0;
-      const oldPrice = hasDiscount ? `<span class="old">${formatPrice(course.price)}</span>` : '';
+      const oldPrice = hasDiscount ? `<span class=\"old\">${formatPrice(course.price)}</span>` : '';
       const discounted = hasDiscount ? Number(course.price) * (1 - Number(course.discount_percentage) / 100) : Number(course.price);
-      const nowPrice = `<span class="now">${formatPrice(discounted)}</span>`;
+      const nowPrice = `<span class=\"now\">${formatPrice(discounted)}</span>`;
       const thumb = course.thumbnail_url || 'https://images.unsplash.com/photo-1513885535751-8b9238bd3456?q=80&w=1200&auto=format&fit=crop';
 
       return `
-        <article class="card" role="article">
-          <div class="card__thumb">
-            <img alt="${course.title}" src="${thumb}" loading="lazy" />
-            ${hasDiscount ? `<div class="badge">-${course.discount_percentage}%</div>` : ''}
+        <article class=\"card\" role=\"article\">
+          <div class=\"card__thumb\">
+            <img alt=\"${course.title}\" src=\"${thumb}\" loading=\"lazy\" />
+            ${hasDiscount ? `<div class=\"badge\">-${course.discount_percentage}%</div>` : ''}
           </div>
-          <div class="card__body">
-            <h3 class="card__title">${course.title}</h3>
-            <div class="meta">
+          <div class=\"card__body\">
+            <h3 class=\"card__title\">${course.title}</h3>
+            <div class=\"meta\">
               <span>⏱ ${course.duration_weeks || 0} semanas</span>
               <span>🎼 ${course.level}</span>
               <span>⭐ ${course.rating || 5}</span>
             </div>
-            <div class="price">${oldPrice}${nowPrice}</div>
+            <div class=\"price\">${oldPrice}${nowPrice}</div>
           </div>
         </article>
       `;
