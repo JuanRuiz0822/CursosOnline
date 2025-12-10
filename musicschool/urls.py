@@ -8,6 +8,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='MusicSchool Colombia.html')),
     path('admin/', admin.site.urls),
     path('api/', include('courses.urls')),
+    path('api/auth/', include('users.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]
 
