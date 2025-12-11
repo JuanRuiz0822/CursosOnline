@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MusicSchool Colombia</title>
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Estilos globales: forzar recarga con versionado -->
+  <link rel="stylesheet" href="/static/styles.css?v=4" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎵</text></svg>">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <div class="brand">
+        <img class="brand__logo" alt="Logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24'%3E%3Ctext y='18' x='2' font-size='18'%3E%F0%9F%8E%B5%3C/text%3E%3C/svg%3E"/>
+        <span>MusicSchool Colombia</span>
+      </div>
+      <nav class="nav" role="navigation" aria-label="principal">
+        <a class="active" href="/">Inicio</a>
+        <a href="#cursos">Cursos</a>
+        <a href="#contacto">Contacto</a>
+        <!-- Acciones si NO autenticado -->
+        <a id="btn-login-open" href="#">Ingresar</a>
+        <a id="btn-register-open" href="#">Registrarse</a>
+        <!-- Acciones si autenticado -->
+        <span id="user-actions" class="hidden">
+          <a id="btn-add-course-open" href="#">Agregar Curso</a>
+          <a id="btn-logout" href="#">Salir</a>
+          <span id="user-label" style="opacity:.8"></span>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <h1>Aprende Música Online</h1>
+        <p>Cursos profesionales de música en línea, presenciales e híbridos. Mejora tu técnica con instructores expertos.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#cursos">Explorar Cursos</a>
+        </div>
+      </div>
+      <div>
+        <img alt="Ilustración musical" loading="lazy" src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop" style="border-radius: 18px; box-shadow: var(--shadow-lg);" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section class="section">
+    <div class="container">
+      <div class="benefits">
+        <article class="benefit">
+          <h3>Instructores Expertos</h3>
+          <p>Aprende de profesionales con experiencia comprobada en escenario y docencia.</p>
+        </article>
+        <article class="benefit">
+          <h3>Modalidades Flexibles</h3>
+          <p>Clases online, presenciales o híbridas según tu disponibilidad.</p>
+        </article>
+        <article class="benefit">
+          <h3>Contenido de Calidad</h3>
+          <p>Lecciones estructuradas, materiales descargables y soporte continuo.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cursos Destacados -->
+  <section id="cursos" class="section" aria-labelledby="cursos-title">
+    <div class="container">
+      <div class="courses__header">
+        <h2 id="cursos-title" style="margin:0">Cursos Destacados</h2>
+        <div>
+          <select id="order" aria-label="Ordenar" style="padding:8px 12px; border-radius:10px; border:1px solid #e5eef7;">
+            <option value="-created_at">Nuevos</option>
+            <option value="-rating">Mejor calificados</option>
+            <option value="price">Precio: menor a mayor</option>
+            <option value="-price">Precio: mayor a menor</option>
+          </select>
+        </div>
+      </div>
+      <div id="courses-grid" class="courses__grid" aria-live="polite"></div>
+      <div id="pagination" class="center" style="margin-top:16px"></div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="section section-sm" aria-labelledby="contact-title">
+    <div class="container">
+      <h2 id="contact-title" class="center" style="margin-top:0">Contacto</h2>
+      <div class="center" style="max-width:700px;margin:0 auto;">
+        <p style="color:var(--text-500)">¿Tienes dudas o necesitas asesoría? Escríbenos y te responderemos pronto.</p>
+        <form id="contact-form" action="mailto:info@musicschool.co" method="post" enctype="text/plain" style="display:grid;gap:12px;margin-top:12px">
+          <input type="text" name="name" placeholder="Tu nombre" required />
+          <input type="email" name="email" placeholder="Tu email" required />
+          <textarea name="message" placeholder="Tu mensaje" rows="4" style="padding:12px;border:1px solid #e5eef7;border-radius:10px" required></textarea>
+          <div>
+            <button class="btn btn--primary" type="submit">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <h3 style="margin-top:0;color:#e2e8f0">MusicSchool Colombia</h3>
+        <p style="margin:0;color:#94a3b8">Aprende con los mejores, a tu ritmo y desde cualquier lugar.</p>
+      </div>
+      <div>
+        <h4 style="margin-top:0;color:#e2e8f0">Enlaces</h4>
+        <ul style="list-style:none; padding:0; margin:0; color:#cbd5e1">
+          <li><a href="#cursos">Cursos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin-top:0;color:#e2e8f0">Contacto</h4>
+        <p style="margin:0;color:#cbd5e1">info@musicschool.co</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      © <span id="year"></span> MusicSchool Colombia. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <!-- Modales: Login, Registro, Agregar Curso, Detalle, Editar, Comprar -->
+  <div id="modal-login" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="modal">
+      <h3 id="login-title">Ingresar</h3>
+      <p>Accede con tu cuenta para gestionar tus cursos.</p>
+      <form id="form-login">
+        <input name="username" placeholder="Usuario" required />
+        <input name="password" placeholder="Contraseña" type="password" required />
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-login">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-register" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="register-title">
+    <div class="modal">
+      <h3 id="register-title">Registrarse</h3>
+      <p>Crea tu cuenta como estudiante o instructor.</p>
+      <form id="form-register">
+        <input name="username" placeholder="Usuario" required />
+        <input name="email" type="email" placeholder="Email" required />
+        <input name="password" placeholder="Contraseña" type="password" required />
+        <select name="role">
+          <option value="student">Estudiante</option>
+          <option value="instructor">Instructor</option>
+        </select>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-register">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Crear cuenta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-course" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="course-title">
+    <div class="modal">
+      <h3 id="course-title">Agregar Curso</h3>
+      <p>Completa los campos para publicar tu curso.</p>
+      <form id="form-course">
+        <input name="title" placeholder="Título" required />
+        <textarea name="description" placeholder="Descripción" rows="3" style="padding:12px;border:1px solid #e5eef7;border-radius:10px" required></textarea>
+        <div style="display:grid;gap:12px;grid-template-columns: repeat(2, minmax(0,1fr));">
+          <select name="category" required>
+            <option value="guitar">Guitarra</option>
+            <option value="piano">Piano</option>
+            <option value="violin">Violín</option>
+            <option value="drums">Batería</option>
+            <option value="singing">Canto</option>
+            <option value="music_theory">Teoría Musical</option>
+          </select>
+          <select name="course_type" required>
+            <option value="online">En línea</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+          <select name="level" required>
+            <option value="beginner">Principiante</option>
+            <option value="intermediate">Intermedio</option>
+            <option value="advanced">Avanzado</option>
+          </select>
+          <input name="duration_weeks" type="number" min="1" step="1" placeholder="Semanas" required />
+          <input name="total_lessons" type="number" min="1" step="1" placeholder="Total lecciones" required />
+          <input name="price" type="number" min="0" step="0.01" placeholder="Precio (COP)" required />
+          <input name="discount_percentage" type="number" min="0" max="100" step="1" placeholder="Descuento % (opcional)" />
+        </div>
+        <textarea name="schedule" placeholder="Horario (opcional)" rows="2" style="padding:12px;border:1px solid #e5eef7;border-radius:10px"></textarea>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-course">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Publicar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Detalle del Curso -->
+  <div id="modal-course-detail" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal" style="max-width:600px;">
+      <h3 id="detail-title">Detalle del Curso</h3>
+      <div id="course-detail-content" style="display:grid;gap:12px;">
+        <!-- Se llena dinámicamente -->
+      </div>
+      <div class="actions" id="course-detail-actions">
+        <!-- Se llena dinámicamente con botones contextuales -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Curso (para instructores) -->
+  <div id="modal-edit-course" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal">
+      <h3 id="edit-title">Editar Curso</h3>
+      <form id="form-edit-course">
+        <input name="title" placeholder="Título" required />
+        <textarea name="description" placeholder="Descripción" rows="3" style="padding:12px;border:1px solid #e5eef7;border-radius:10px" required></textarea>
+        <div style="display:grid;gap:12px;grid-template-columns: repeat(2, minmax(0,1fr));">
+          <select name="category" required>
+            <option value="guitar">Guitarra</option>
+            <option value="piano">Piano</option>
+            <option value="violin">Violín</option>
+            <option value="drums">Batería</option>
+            <option value="singing">Canto</option>
+            <option value="music_theory">Teoría Musical</option>
+          </select>
+          <select name="course_type" required>
+            <option value="online">En línea</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+          <select name="level" required>
+            <option value="beginner">Principiante</option>
+            <option value="intermediate">Intermedio</option>
+            <option value="advanced">Avanzado</option>
+          </select>
+          <input name="duration_weeks" type="number" min="1" step="1" placeholder="Semanas" required />
+          <input name="total_lessons" type="number" min="1" step="1" placeholder="Total lecciones" required />
+          <input name="price" type="number" min="0" step="0.01" placeholder="Precio (COP)" required />
+          <input name="discount_percentage" type="number" min="0" max="100" step="1" placeholder="Descuento % (opcional)" />
+        </div>
+        <textarea name="schedule" placeholder="Horario (opcional)" rows="2" style="padding:12px;border:1px solid #e5eef7;border-radius:10px"></textarea>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-edit-course">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Comprar Curso -->
+  <div id="modal-buy-course" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+    <div class="modal" style="max-width:500px;">
+      <h3 id="buy-title">Comprar Curso</h3>
+      <form id="form-buy-course">
+        <div id="buy-course-info" style="background:#f1f5f9;padding:12px;border-radius:10px;margin-bottom:12px;">
+          <!-- Se llena dinámicamente con info del curso -->
+        </div>
+        <label style="display:block;margin-bottom:12px;">
+          <strong>Método de Pago</strong>
+        </label>
+        <div style="display:grid;gap:8px;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="payment_method" value="card" checked required />
+            <span>💳 Tarjeta de Crédito/Débito</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="payment_method" value="nequi" required />
+            <span>📱 Nequi</span>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-buy-course">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Pagar Ahora</button>
+        </div>
+      </form>
+      <div id="buy-course-status" style="display:none;margin-top:12px;padding:12px;border-radius:10px;text-align:center;">
+        <!-- Se llena dinámicamente con estado del pago -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const grid = document.getElementById('courses-grid');
+    const selectOrder = document.getElementById('order');
+    const pagination = document.getElementById('pagination');
+
+    // Helpers de auth
+    const TOKEN_KEY = 'ms_token';
+    const USER_KEY = 'ms_user';
+
+    function getToken() { return localStorage.getItem(TOKEN_KEY); }
+    function setToken(t) { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }
+    function setUser(u) { u ? localStorage.setItem(USER_KEY, JSON.stringify(u)) : localStorage.removeItem(USER_KEY); }
+    function getUser() { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; } }
+
+    // UI Header auth
+    const btnLoginOpen = document.getElementById('btn-login-open');
+    const btnRegisterOpen = document.getElementById('btn-register-open');
+    const userActions = document.getElementById('user-actions');
+    const userLabel = document.getElementById('user-label');
+    const btnLogout = document.getElementById('btn-logout');
+    const btnAddCourseOpen = document.getElementById('btn-add-course-open');
+
+    function updateHeaderUI() {
+      const token = getToken();
+      const user = getUser();
+      const logged = !!token && !!user;
+      btnLoginOpen.style.display = logged ? 'none' : '';
+      btnRegisterOpen.style.display = logged ? 'none' : '';
+      userActions.classList.toggle('hidden', !logged);
+      if (logged) {
+        userLabel.textContent = ' ' + (user.email || user.username || 'usuario');
+        // Solo instructores pueden ver "Agregar Curso"
+        btnAddCourseOpen.style.display = user.role === 'instructor' ? '' : 'none';
+      }
+    }
+
+    // Modales utilidades
+    function openModal(id) { document.querySelector(id).classList.add('show'); }
+    function closeModal(id) { document.querySelector(id).classList.remove('show'); }
+    document.querySelectorAll('[data-close]').forEach(el => {
+      el.addEventListener('click', () => closeModal(el.getAttribute('data-close')));
+    });
+
+    btnLoginOpen.addEventListener('click', (e) => { e.preventDefault(); openModal('#modal-login'); });
+    btnRegisterOpen.addEventListener('click', (e) => { e.preventDefault(); openModal('#modal-register'); });
+    btnAddCourseOpen.addEventListener('click', (e) => { e.preventDefault(); openModal('#modal-course'); });
+
+    btnLogout.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const token = getToken();
+      try {
+        await fetch('/api/auth/logout/', { method: 'POST', headers: { 'Authorization': 'Token ' + token } });
+      } catch {}
+      setToken(null); setUser(null); updateHeaderUI();
+    });
+
+    // Formularios Auth
+    const formLogin = document.getElementById('form-login');
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(formLogin);
+      const payload = { username: fd.get('username'), password: fd.get('password') };
+      const res = await fetch('/api/auth/login/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { alert('Credenciales inválidas'); return; }
+      const data = await res.json();
+      setToken(data.token); setUser(data.user); updateHeaderUI(); closeModal('#modal-login');
+      loadCourses(selectOrder.value);
+    });
+
+    const formRegister = document.getElementById('form-register');
+    formRegister.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(formRegister);
+      const payload = { username: fd.get('username'), email: fd.get('email'), password: fd.get('password'), role: fd.get('role') };
+      const res = await fetch('/api/auth/register/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { const err = await res.json().catch(()=>({detail:'Error'})); alert(err.detail || 'Error'); return; }
+      const data = await res.json();
+      setToken(data.token); setUser(data.user); updateHeaderUI(); closeModal('#modal-register');
+      loadCourses(selectOrder.value);
+    });
+
+    // Crear curso (solo instructores)
+    const formCourse = document.getElementById('form-course');
+    formCourse.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(formCourse);
+      const payload = {
+        title: String(fd.get('title')||'').trim(),
+        description: String(fd.get('description')||'').trim(),
+        category: fd.get('category'),
+        course_type: fd.get('course_type'),
+        level: fd.get('level'),
+        price: fd.get('price'),
+        discount_percentage: fd.get('discount_percentage') || 0,
+        duration_weeks: fd.get('duration_weeks'),
+        total_lessons: fd.get('total_lessons'),
+        schedule: fd.get('schedule') || ''
+      };
+      const token = getToken();
+      const res = await fetch('/api/courses/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Token ' + token }, body: JSON.stringify(payload) });
+      if (!res.ok) { const err = await res.json().catch(()=>({detail:'Error'})); alert(err.detail || 'Error'); return; }
+      closeModal('#modal-course');
+      formCourse.reset();
+      currentPage = 1;
+      loadCourses(selectOrder.value, currentPage);
+    });
+
+    // Listado cursos + paginación
+    function formatPrice(num) {
+      try { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Number(num)); } catch { return num; }
+    }
+
+    // Variable global para almacenar el curso actual en detalle/edición/compra
+    let currentCourse = null;
+
+    function courseCard(course) {
+      const hasDiscount = (course.discount_percentage || 0) > 0;
+      const oldPrice = hasDiscount ? `<span class="old">${formatPrice(course.price)}</span>` : '';
+      const discounted = hasDiscount ? Number(course.price) * (1 - Number(course.discount_percentage) / 100) : Number(course.price);
+      const nowPrice = `<span class="now">${formatPrice(discounted)}</span>`;
+      const thumb = course.thumbnail_url || 'https://images.unsplash.com/photo-1513885535751-8b9238bd3456?q=80&w=1200&auto=format&fit=crop';
+      const instructor = course.instructor_name ? `<div class="meta"><span>👨‍🏫 ${course.instructor_name}</span></div>` : '';
+
+      return `
+        <article class="card" role="article" style="cursor:pointer;" data-course-id="${course.id}">
+          <div class="card__thumb">
+            <img alt="${course.title}" src="${thumb}" loading="lazy" />
+            ${hasDiscount ? `<div class="badge">-${course.discount_percentage}%</div>` : ''}
+          </div>
+          <div class="card__body">
+            <h3 class="card__title">${course.title}</h3>
+            ${instructor}
+            <div class="meta">
+              <span>⏱ ${course.duration_weeks || 0} semanas</span>
+              <span>🎼 ${course.level}</span>
+              <span>⭐ ${course.rating || 5}</span>
+            </div>
+            <div class="price">${oldPrice}${nowPrice}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    // Mostrar detalle del curso
+    function showCourseDetail(course) {
+      currentCourse = course;
+      const hasDiscount = (course.discount_percentage || 0) > 0;
+      const discounted = hasDiscount ? Number(course.price) * (1 - Number(course.discount_percentage) / 100) : Number(course.price);
+      
+      const detailContent = document.getElementById('course-detail-content');
+      detailContent.innerHTML = `
+        <div>
+          <strong>Instructor:</strong> ${course.instructor_name || 'N/A'}
+        </div>
+        <div>
+          <strong>Categoría:</strong> ${course.category}
+        </div>
+        <div>
+          <strong>Tipo:</strong> ${course.course_type}
+        </div>
+        <div>
+          <strong>Nivel:</strong> ${course.level}
+        </div>
+        <div>
+          <strong>Duración:</strong> ${course.duration_weeks} semanas
+        </div>
+        <div>
+          <strong>Lecciones:</strong> ${course.total_lessons}
+        </div>
+        <div>
+          <strong>Precio:</strong> ${formatPrice(discounted)}
+        </div>
+        <div>
+          <strong>Descripción:</strong>
+          <p style="margin:8px 0 0 0;color:var(--text-500);">${course.description}</p>
+        </div>
+        ${course.schedule ? `<div><strong>Horario:</strong> ${course.schedule}</div>` : ''}
+      `;
+
+      const user = getUser();
+      const actionsDiv = document.getElementById('course-detail-actions');
+      let actionsHTML = '<button type="button" class="btn" data-close="#modal-course-detail">Cerrar</button>';
+
+      if (user && user.role === 'instructor' && course.instructor_id === user.instructor_id) {
+        // Es el instructor dueño del curso
+        actionsHTML += '<button type="button" class="btn btn--primary" id="btn-edit-course">Editar</button>';
+      } else if (user && user.role === 'student') {
+        // Es estudiante
+        actionsHTML += '<button type="button" class="btn btn--primary" id="btn-buy-course">Comprar</button>';
+      }
+
+      actionsDiv.innerHTML = actionsHTML;
+
+      // Agregar listeners a los botones dinámicos
+      const btnEdit = document.getElementById('btn-edit-course');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', () => {
+          closeModal('#modal-course-detail');
+          showEditCourseModal(course);
+        });
+      }
+
+      const btnBuy = document.getElementById('btn-buy-course');
+      if (btnBuy) {
+        btnBuy.addEventListener('click', () => {
+          closeModal('#modal-course-detail');
+          showBuyCourseModal(course);
+        });
+      }
+
+      openModal('#modal-course-detail');
+    }
+
+    // Mostrar modal de edición
+    function showEditCourseModal(course) {
+      const form = document.getElementById('form-edit-course');
+      form.title.value = course.title;
+      form.description.value = course.description;
+      form.category.value = course.category;
+      form.course_type.value = course.course_type;
+      form.level.value = course.level;
+      form.duration_weeks.value = course.duration_weeks;
+      form.total_lessons.value = course.total_lessons;
+      form.price.value = course.price;
+      form.discount_percentage.value = course.discount_percentage || 0;
+      form.schedule.value = course.schedule || '';
+
+      // Guardar el ID del curso en un atributo data
+      form.dataset.courseId = course.id;
+
+      openModal('#modal-edit-course');
+    }
+
+    // Guardar cambios del curso
+    const formEditCourse = document.getElementById('form-edit-course');
+    formEditCourse.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = formEditCourse.dataset.courseId;
+      const fd = new FormData(formEditCourse);
+      const payload = {
+        title: String(fd.get('title')||'').trim(),
+        description: String(fd.get('description')||'').trim(),
+        category: fd.get('category'),
+        course_type: fd.get('course_type'),
+        level: fd.get('level'),
+        price: fd.get('price'),
+        discount_percentage: fd.get('discount_percentage') || 0,
+        duration_weeks: fd.get('duration_weeks'),
+        total_lessons: fd.get('total_lessons'),
+        schedule: fd.get('schedule') || ''
+      };
+      const token = getToken();
+      const res = await fetch(`/api/courses/${courseId}/`, { 
+        method: 'PATCH', 
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token ' + token }, 
+        body: JSON.stringify(payload) 
+      });
+      if (!res.ok) { const err = await res.json().catch(()=>({detail:'Error'})); alert(err.detail || 'Error'); return; }
+      alert('Curso actualizado exitosamente');
+      closeModal('#modal-edit-course');
+      currentPage = 1;
+      loadCourses(selectOrder.value, currentPage);
+    });
+
+    // Mostrar modal de compra
+    function showBuyCourseModal(course) {
+      const buyInfo = document.getElementById('buy-course-info');
+      const discounted = Number(course.price) * (1 - Number(course.discount_percentage || 0) / 100);
+      buyInfo.innerHTML = `
+        <div><strong>${course.title}</strong></div>
+        <div style="font-size:14px;color:var(--text-500);">Instructor: ${course.instructor_name}</div>
+        <div style="font-size:18px;font-weight:bold;color:var(--primary);">${formatPrice(discounted)}</div>
+      `;
+
+      const form = document.getElementById('form-buy-course');
+      form.dataset.courseId = course.id;
+      form.payment_method.value = 'card';
+
+      openModal('#modal-buy-course');
+    }
+
+    // Procesar compra
+    const formBuyCourse = document.getElementById('form-buy-course');
+    formBuyCourse.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = formBuyCourse.dataset.courseId;
+      const method = formBuyCourse.payment_method.value;
+      const token = getToken();
+
+      const payload = { course_id: courseId, method: method };
+      const res = await fetch('/api/payments/checkout/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token ' + token },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({detail:'Error'}));
+        alert(err.detail || 'Error al iniciar el pago');
+        return;
+      }
+
+      const data = await res.json();
+      const reference = data.reference;
+
+      // Mostrar estado de pago
+      const statusDiv = document.getElementById('buy-course-status');
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = `
+        <div style="background:#fef3c7;border:1px solid #fcd34d;color:#92400e;padding:12px;border-radius:8px;">
+          <strong>Pago iniciado</strong><br/>
+          Referencia: ${reference}<br/>
+          <small>En demo, usa el webhook para simular aprobación.</small>
+        </div>
+      `;
+
+      // Polling para verificar estado (opcional)
+      let attempts = 0;
+      const checkStatus = setInterval(async () => {
+        attempts++;
+        const statusRes = await fetch(`/api/payments/status/?reference=${reference}`, {
+          headers: { 'Authorization': 'Token ' + token }
+        });
+        if (statusRes.ok) {
+          const statusData = await statusRes.json();
+          if (statusData.status === 'approved') {
+            clearInterval(checkStatus);
+            statusDiv.innerHTML = `
+              <div style="background:#dcfce7;border:1px solid #86efac;color:#166534;padding:12px;border-radius:8px;">
+                <strong>✓ Pago Aprobado</strong><br/>
+                Ya estás inscrito en el curso. ¡Bienvenido!
+              </div>
+            `;
+            setTimeout(() => {
+              closeModal('#modal-buy-course');
+              loadCourses(selectOrder.value, currentPage);
+            }, 2000);
+          } else if (statusData.status === 'rejected') {
+            clearInterval(checkStatus);
+            statusDiv.innerHTML = `
+              <div style="background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:12px;border-radius:8px;">
+                <strong>✗ Pago Rechazado</strong><br/>
+                Intenta nuevamente con otro método.
+              </div>
+            `;
+          }
+        }
+        if (attempts > 30) clearInterval(checkStatus); // Máximo 30 intentos (30 segundos)
+      }, 1000);
+    });
+
+    // Agregar listeners a las tarjetas para abrir detalle
+    function attachCardListeners() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', async () => {
+          const courseId = card.dataset.courseId;
+          const res = await fetch(`/api/courses/${courseId}/`);
+          if (res.ok) {
+            const course = await res.json();
+            showCourseDetail(course);
+          }
+        });
+      });
+    }
+
+    let currentPage = 1;
+    async function loadCourses(ordering = '-created_at', page = 1) {
+      grid.innerHTML = '<div class="center" style="grid-column:1/-1;color:var(--text-500)">Cargando cursos…</div>';
+      pagination.innerHTML = '';
+      try {
+        const url = `/api/courses/?ordering=${encodeURIComponent(ordering)}&page=${page}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : (Array.isArray(data.results) ? data.results : []);
+        if (!Array.isArray(items) || items.length === 0) {
+          grid.innerHTML = '<div class="center" style="grid-column:1/-1;color:var(--text-500)">No hay cursos disponibles por ahora.</div>';
+        } else {
+          grid.innerHTML = items.map(courseCard).join('');
+          attachCardListeners();
+        }
+        // Paginación simple si existe next/previous
+        if (data && typeof data === 'object' && ('next' in data || 'previous' in data)) {
+          const prevBtn = `<button class="btn" ${data.previous ? '' : 'disabled'} id="btn-prev">Anterior</button>`;
+          const nextBtn = `<button class="btn" ${data.next ? '' : 'disabled'} id="btn-next">Siguiente</button>`;
+          pagination.innerHTML = `${prevBtn} <span style="margin:0 8px;opacity:.7">Página ${page}</span> ${nextBtn}`;
+          const prev = document.getElementById('btn-prev');
+          const next = document.getElementById('btn-next');
+          prev && prev.addEventListener('click', () => { if (data.previous) { currentPage = Math.max(1, page - 1); loadCourses(ordering, currentPage); } });
+          next && next.addEventListener('click', () => { if (data.next) { currentPage = page + 1; loadCourses(ordering, currentPage); } });
+        }
+      } catch (e) {
+        grid.innerHTML = '<div class="center" style="grid-column:1/-1;color:crimson">Error cargando cursos.</div>';
+      }
+    }
+
+    selectOrder.addEventListener('change', (e) => { currentPage = 1; loadCourses(e.target.value, currentPage); });
+
+    // Hidratar estado de usuario si hay token
+    (async function initAuth() {
+      const token = getToken();
+      if (token) {
+        try {
+          const res = await fetch('/api/auth/me/', { headers: { 'Authorization': 'Token ' + token } });
+          if (res.ok) { const data = await res.json(); setUser(data.user); } else { setToken(null); setUser(null); }
+        } catch { setToken(null); setUser(null); }
+      }
+      updateHeaderUI();
+    })();
+
+    // Cargar cursos inicio
+    loadCourses(selectOrder.value, currentPage);
+  </script>
+</body>
+</html>
