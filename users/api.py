@@ -9,6 +9,13 @@ from .models import CustomUser, Instructor
 
 
 def user_payload(user: CustomUser):
+    instructor_id = None
+    if user.role == 'instructor':
+        try:
+            instructor_id = user.instructor.id
+        except:
+            pass
+    
     return {
         "id": user.id,
         "username": user.username,
@@ -16,6 +23,7 @@ def user_payload(user: CustomUser):
         "role": user.role,
         "first_name": user.first_name,
         "last_name": user.last_name,
+        "instructor_id": instructor_id,
     }
 
 

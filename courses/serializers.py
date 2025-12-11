@@ -9,18 +9,22 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
     instructor_name = serializers.SerializerMethodField()
+    instructor_id = serializers.SerializerMethodField()
     thumbnail_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'description', 'instructor_name', 'category', 
+            'id', 'title', 'description', 'instructor_name', 'instructor_id', 'category', 
             'course_type', 'level', 'price', 'discount_percentage', 
             'duration_weeks', 'total_lessons', 'rating', 'schedule', 'lessons', 'thumbnail_url'
         ]
     
     def get_instructor_name(self, obj):
         return obj.instructor.user.get_full_name() or obj.instructor.user.username
+
+    def get_instructor_id(self, obj):
+        return obj.instructor.id
 
     def get_thumbnail_url(self, obj):
         if obj.thumbnail:

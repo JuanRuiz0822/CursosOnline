@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <!-- Estilos globales: forzar recarga con versionado -->
-  <link rel="stylesheet" href="/static/styles.css?v=4" />
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="/static/styles.css?v=5" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎵</text></svg>">
 </head>
 <body>
@@ -329,7 +329,6 @@
       userActions.classList.toggle('hidden', !logged);
       if (logged) {
         userLabel.textContent = ' ' + (user.email || user.username || 'usuario');
-        // Solo instructores pueden ver "Agregar Curso"
         btnAddCourseOpen.style.display = user.role === 'instructor' ? '' : 'none';
       }
     }
@@ -410,7 +409,6 @@
       try { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Number(num)); } catch { return num; }
     }
 
-    // Variable global para almacenar el curso actual en detalle/edición/compra
     let currentCourse = null;
 
     function courseCard(course) {
@@ -482,16 +480,13 @@
       let actionsHTML = '<button type="button" class="btn" data-close="#modal-course-detail">Cerrar</button>';
 
       if (user && user.role === 'instructor' && course.instructor_id === user.instructor_id) {
-        // Es el instructor dueño del curso
         actionsHTML += '<button type="button" class="btn btn--primary" id="btn-edit-course">Editar</button>';
       } else if (user && user.role === 'student') {
-        // Es estudiante
         actionsHTML += '<button type="button" class="btn btn--primary" id="btn-buy-course">Comprar</button>';
       }
 
       actionsDiv.innerHTML = actionsHTML;
 
-      // Agregar listeners a los botones dinámicos
       const btnEdit = document.getElementById('btn-edit-course');
       if (btnEdit) {
         btnEdit.addEventListener('click', () => {
@@ -524,10 +519,7 @@
       form.price.value = course.price;
       form.discount_percentage.value = course.discount_percentage || 0;
       form.schedule.value = course.schedule || '';
-
-      // Guardar el ID del curso en un atributo data
       form.dataset.courseId = course.id;
-
       openModal('#modal-edit-course');
     }
 
@@ -575,7 +567,6 @@
       const form = document.getElementById('form-buy-course');
       form.dataset.courseId = course.id;
       form.payment_method.value = 'card';
-
       openModal('#modal-buy-course');
     }
 
@@ -603,7 +594,6 @@
       const data = await res.json();
       const reference = data.reference;
 
-      // Mostrar estado de pago
       const statusDiv = document.getElementById('buy-course-status');
       statusDiv.style.display = 'block';
       statusDiv.innerHTML = `
@@ -614,7 +604,6 @@
         </div>
       `;
 
-      // Polling para verificar estado (opcional)
       let attempts = 0;
       const checkStatus = setInterval(async () => {
         attempts++;
@@ -645,7 +634,7 @@
             `;
           }
         }
-        if (attempts > 30) clearInterval(checkStatus); // Máximo 30 intentos (30 segundos)
+        if (attempts > 30) clearInterval(checkStatus);
       }, 1000);
     });
 
@@ -678,7 +667,6 @@
           grid.innerHTML = items.map(courseCard).join('');
           attachCardListeners();
         }
-        // Paginación simple si existe next/previous
         if (data && typeof data === 'object' && ('next' in data || 'previous' in data)) {
           const prevBtn = `<button class="btn" ${data.previous ? '' : 'disabled'} id="btn-prev">Anterior</button>`;
           const nextBtn = `<button class="btn" ${data.next ? '' : 'disabled'} id="btn-next">Siguiente</button>`;
@@ -695,7 +683,6 @@
 
     selectOrder.addEventListener('change', (e) => { currentPage = 1; loadCourses(e.target.value, currentPage); });
 
-    // Hidratar estado de usuario si hay token
     (async function initAuth() {
       const token = getToken();
       if (token) {
@@ -707,7 +694,6 @@
       updateHeaderUI();
     })();
 
-    // Cargar cursos inicio
     loadCourses(selectOrder.value, currentPage);
   </script>
 </body>
