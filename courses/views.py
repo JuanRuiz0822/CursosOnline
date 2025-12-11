@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
+from .permissions import IsInstructorOwnerOrReadOnly
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.filter(is_active=True)
     serializer_class = CourseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsInstructorOwnerOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'course_type', 'level', 'instructor', 'is_active']
     search_fields = ['title', 'description']

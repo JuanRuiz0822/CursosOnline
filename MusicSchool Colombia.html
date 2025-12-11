@@ -134,7 +134,7 @@
     </div>
   </footer>
 
-  <!-- Modales: Login, Registro, Agregar Curso -->
+  <!-- Modales: Login, Registro, Agregar Curso, Detalle, Editar, Comprar -->
   <div id="modal-login" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="login-title">
     <div class="modal">
       <h3 id="login-title">Ingresar</h3>
@@ -210,6 +210,91 @@
     </div>
   </div>
 
+  <!-- Modal: Detalle del Curso -->
+  <div id="modal-course-detail" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal" style="max-width:600px;">
+      <h3 id="detail-title">Detalle del Curso</h3>
+      <div id="course-detail-content" style="display:grid;gap:12px;">
+        <!-- Se llena dinámicamente -->
+      </div>
+      <div class="actions" id="course-detail-actions">
+        <!-- Se llena dinámicamente con botones contextuales -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Curso (para instructores) -->
+  <div id="modal-edit-course" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal">
+      <h3 id="edit-title">Editar Curso</h3>
+      <form id="form-edit-course">
+        <input name="title" placeholder="Título" required />
+        <textarea name="description" placeholder="Descripción" rows="3" style="padding:12px;border:1px solid #e5eef7;border-radius:10px" required></textarea>
+        <div style="display:grid;gap:12px;grid-template-columns: repeat(2, minmax(0,1fr));">
+          <select name="category" required>
+            <option value="guitar">Guitarra</option>
+            <option value="piano">Piano</option>
+            <option value="violin">Violín</option>
+            <option value="drums">Batería</option>
+            <option value="singing">Canto</option>
+            <option value="music_theory">Teoría Musical</option>
+          </select>
+          <select name="course_type" required>
+            <option value="online">En línea</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+          <select name="level" required>
+            <option value="beginner">Principiante</option>
+            <option value="intermediate">Intermedio</option>
+            <option value="advanced">Avanzado</option>
+          </select>
+          <input name="duration_weeks" type="number" min="1" step="1" placeholder="Semanas" required />
+          <input name="total_lessons" type="number" min="1" step="1" placeholder="Total lecciones" required />
+          <input name="price" type="number" min="0" step="0.01" placeholder="Precio (COP)" required />
+          <input name="discount_percentage" type="number" min="0" max="100" step="1" placeholder="Descuento % (opcional)" />
+        </div>
+        <textarea name="schedule" placeholder="Horario (opcional)" rows="2" style="padding:12px;border:1px solid #e5eef7;border-radius:10px"></textarea>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-edit-course">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Comprar Curso -->
+  <div id="modal-buy-course" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+    <div class="modal" style="max-width:500px;">
+      <h3 id="buy-title">Comprar Curso</h3>
+      <form id="form-buy-course">
+        <div id="buy-course-info" style="background:#f1f5f9;padding:12px;border-radius:10px;margin-bottom:12px;">
+          <!-- Se llena dinámicamente con info del curso -->
+        </div>
+        <label style="display:block;margin-bottom:12px;">
+          <strong>Método de Pago</strong>
+        </label>
+        <div style="display:grid;gap:8px;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="payment_method" value="card" checked required />
+            <span>💳 Tarjeta de Crédito/Débito</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="radio" name="payment_method" value="nequi" required />
+            <span>📱 Nequi</span>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" data-close="#modal-buy-course">Cancelar</button>
+          <button class="btn btn--primary" type="submit">Pagar Ahora</button>
+        </div>
+      </form>
+      <div id="buy-course-status" style="display:none;margin-top:12px;padding:12px;border-radius:10px;text-align:center;">
+        <!-- Se llena dinámicamente con estado del pago -->
+      </div>
+    </div>
+  </div>
+
   <script>
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -279,7 +364,6 @@
       if (!res.ok) { alert('Credenciales inválidas'); return; }
       const data = await res.json();
       setToken(data.token); setUser(data.user); updateHeaderUI(); closeModal('#modal-login');
-      // recargar cursos por si hay nuevos del usuario
       loadCourses(selectOrder.value);
     });
 
@@ -317,7 +401,6 @@
       if (!res.ok) { const err = await res.json().catch(()=>({detail:'Error'})); alert(err.detail || 'Error'); return; }
       closeModal('#modal-course');
       formCourse.reset();
-      // recargar listado (primera página, manteniendo orden actual)
       currentPage = 1;
       loadCourses(selectOrder.value, currentPage);
     });
@@ -326,6 +409,9 @@
     function formatPrice(num) {
       try { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Number(num)); } catch { return num; }
     }
+
+    // Variable global para almacenar el curso actual en detalle/edición/compra
+    let currentCourse = null;
 
     function courseCard(course) {
       const hasDiscount = (course.discount_percentage || 0) > 0;
@@ -336,7 +422,7 @@
       const instructor = course.instructor_name ? `<div class="meta"><span>👨‍🏫 ${course.instructor_name}</span></div>` : '';
 
       return `
-        <article class="card" role="article">
+        <article class="card" role="article" style="cursor:pointer;" data-course-id="${course.id}">
           <div class="card__thumb">
             <img alt="${course.title}" src="${thumb}" loading="lazy" />
             ${hasDiscount ? `<div class="badge">-${course.discount_percentage}%</div>` : ''}
@@ -355,6 +441,228 @@
       `;
     }
 
+    // Mostrar detalle del curso
+    function showCourseDetail(course) {
+      currentCourse = course;
+      const hasDiscount = (course.discount_percentage || 0) > 0;
+      const discounted = hasDiscount ? Number(course.price) * (1 - Number(course.discount_percentage) / 100) : Number(course.price);
+      
+      const detailContent = document.getElementById('course-detail-content');
+      detailContent.innerHTML = `
+        <div>
+          <strong>Instructor:</strong> ${course.instructor_name || 'N/A'}
+        </div>
+        <div>
+          <strong>Categoría:</strong> ${course.category}
+        </div>
+        <div>
+          <strong>Tipo:</strong> ${course.course_type}
+        </div>
+        <div>
+          <strong>Nivel:</strong> ${course.level}
+        </div>
+        <div>
+          <strong>Duración:</strong> ${course.duration_weeks} semanas
+        </div>
+        <div>
+          <strong>Lecciones:</strong> ${course.total_lessons}
+        </div>
+        <div>
+          <strong>Precio:</strong> ${formatPrice(discounted)}
+        </div>
+        <div>
+          <strong>Descripción:</strong>
+          <p style="margin:8px 0 0 0;color:var(--text-500);">${course.description}</p>
+        </div>
+        ${course.schedule ? `<div><strong>Horario:</strong> ${course.schedule}</div>` : ''}
+      `;
+
+      const user = getUser();
+      const actionsDiv = document.getElementById('course-detail-actions');
+      let actionsHTML = '<button type="button" class="btn" data-close="#modal-course-detail">Cerrar</button>';
+
+      if (user && user.role === 'instructor' && course.instructor_id === user.instructor_id) {
+        // Es el instructor dueño del curso
+        actionsHTML += '<button type="button" class="btn btn--primary" id="btn-edit-course">Editar</button>';
+      } else if (user && user.role === 'student') {
+        // Es estudiante
+        actionsHTML += '<button type="button" class="btn btn--primary" id="btn-buy-course">Comprar</button>';
+      }
+
+      actionsDiv.innerHTML = actionsHTML;
+
+      // Agregar listeners a los botones dinámicos
+      const btnEdit = document.getElementById('btn-edit-course');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', () => {
+          closeModal('#modal-course-detail');
+          showEditCourseModal(course);
+        });
+      }
+
+      const btnBuy = document.getElementById('btn-buy-course');
+      if (btnBuy) {
+        btnBuy.addEventListener('click', () => {
+          closeModal('#modal-course-detail');
+          showBuyCourseModal(course);
+        });
+      }
+
+      openModal('#modal-course-detail');
+    }
+
+    // Mostrar modal de edición
+    function showEditCourseModal(course) {
+      const form = document.getElementById('form-edit-course');
+      form.title.value = course.title;
+      form.description.value = course.description;
+      form.category.value = course.category;
+      form.course_type.value = course.course_type;
+      form.level.value = course.level;
+      form.duration_weeks.value = course.duration_weeks;
+      form.total_lessons.value = course.total_lessons;
+      form.price.value = course.price;
+      form.discount_percentage.value = course.discount_percentage || 0;
+      form.schedule.value = course.schedule || '';
+
+      // Guardar el ID del curso en un atributo data
+      form.dataset.courseId = course.id;
+
+      openModal('#modal-edit-course');
+    }
+
+    // Guardar cambios del curso
+    const formEditCourse = document.getElementById('form-edit-course');
+    formEditCourse.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = formEditCourse.dataset.courseId;
+      const fd = new FormData(formEditCourse);
+      const payload = {
+        title: String(fd.get('title')||'').trim(),
+        description: String(fd.get('description')||'').trim(),
+        category: fd.get('category'),
+        course_type: fd.get('course_type'),
+        level: fd.get('level'),
+        price: fd.get('price'),
+        discount_percentage: fd.get('discount_percentage') || 0,
+        duration_weeks: fd.get('duration_weeks'),
+        total_lessons: fd.get('total_lessons'),
+        schedule: fd.get('schedule') || ''
+      };
+      const token = getToken();
+      const res = await fetch(`/api/courses/${courseId}/`, { 
+        method: 'PATCH', 
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token ' + token }, 
+        body: JSON.stringify(payload) 
+      });
+      if (!res.ok) { const err = await res.json().catch(()=>({detail:'Error'})); alert(err.detail || 'Error'); return; }
+      alert('Curso actualizado exitosamente');
+      closeModal('#modal-edit-course');
+      currentPage = 1;
+      loadCourses(selectOrder.value, currentPage);
+    });
+
+    // Mostrar modal de compra
+    function showBuyCourseModal(course) {
+      const buyInfo = document.getElementById('buy-course-info');
+      const discounted = Number(course.price) * (1 - Number(course.discount_percentage || 0) / 100);
+      buyInfo.innerHTML = `
+        <div><strong>${course.title}</strong></div>
+        <div style="font-size:14px;color:var(--text-500);">Instructor: ${course.instructor_name}</div>
+        <div style="font-size:18px;font-weight:bold;color:var(--primary);">${formatPrice(discounted)}</div>
+      `;
+
+      const form = document.getElementById('form-buy-course');
+      form.dataset.courseId = course.id;
+      form.payment_method.value = 'card';
+
+      openModal('#modal-buy-course');
+    }
+
+    // Procesar compra
+    const formBuyCourse = document.getElementById('form-buy-course');
+    formBuyCourse.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = formBuyCourse.dataset.courseId;
+      const method = formBuyCourse.payment_method.value;
+      const token = getToken();
+
+      const payload = { course_id: courseId, method: method };
+      const res = await fetch('/api/payments/checkout/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Token ' + token },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({detail:'Error'}));
+        alert(err.detail || 'Error al iniciar el pago');
+        return;
+      }
+
+      const data = await res.json();
+      const reference = data.reference;
+
+      // Mostrar estado de pago
+      const statusDiv = document.getElementById('buy-course-status');
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = `
+        <div style="background:#fef3c7;border:1px solid #fcd34d;color:#92400e;padding:12px;border-radius:8px;">
+          <strong>Pago iniciado</strong><br/>
+          Referencia: ${reference}<br/>
+          <small>En demo, usa el webhook para simular aprobación.</small>
+        </div>
+      `;
+
+      // Polling para verificar estado (opcional)
+      let attempts = 0;
+      const checkStatus = setInterval(async () => {
+        attempts++;
+        const statusRes = await fetch(`/api/payments/status/?reference=${reference}`, {
+          headers: { 'Authorization': 'Token ' + token }
+        });
+        if (statusRes.ok) {
+          const statusData = await statusRes.json();
+          if (statusData.status === 'approved') {
+            clearInterval(checkStatus);
+            statusDiv.innerHTML = `
+              <div style="background:#dcfce7;border:1px solid #86efac;color:#166534;padding:12px;border-radius:8px;">
+                <strong>✓ Pago Aprobado</strong><br/>
+                Ya estás inscrito en el curso. ¡Bienvenido!
+              </div>
+            `;
+            setTimeout(() => {
+              closeModal('#modal-buy-course');
+              loadCourses(selectOrder.value, currentPage);
+            }, 2000);
+          } else if (statusData.status === 'rejected') {
+            clearInterval(checkStatus);
+            statusDiv.innerHTML = `
+              <div style="background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:12px;border-radius:8px;">
+                <strong>✗ Pago Rechazado</strong><br/>
+                Intenta nuevamente con otro método.
+              </div>
+            `;
+          }
+        }
+        if (attempts > 30) clearInterval(checkStatus); // Máximo 30 intentos (30 segundos)
+      }, 1000);
+    });
+
+    // Agregar listeners a las tarjetas para abrir detalle
+    function attachCardListeners() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', async () => {
+          const courseId = card.dataset.courseId;
+          const res = await fetch(`/api/courses/${courseId}/`);
+          if (res.ok) {
+            const course = await res.json();
+            showCourseDetail(course);
+          }
+        });
+      });
+    }
+
     let currentPage = 1;
     async function loadCourses(ordering = '-created_at', page = 1) {
       grid.innerHTML = '<div class="center" style="grid-column:1/-1;color:var(--text-500)">Cargando cursos…</div>';
@@ -368,6 +676,7 @@
           grid.innerHTML = '<div class="center" style="grid-column:1/-1;color:var(--text-500)">No hay cursos disponibles por ahora.</div>';
         } else {
           grid.innerHTML = items.map(courseCard).join('');
+          attachCardListeners();
         }
         // Paginación simple si existe next/previous
         if (data && typeof data === 'object' && ('next' in data || 'previous' in data)) {

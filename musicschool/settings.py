@@ -128,3 +128,13 @@ CORS_ALLOWED_ORIGINS = [
 
 # ===== CUSTOM USER MODEL =====
 AUTH_USER_MODEL = 'users.CustomUser'
+
+# ===== WOMPI PAYMENT GATEWAY =====
+# Reemplaza estos valores con tus tokens reales de Wompi
+WOMPI_PUBLIC_KEY = os.getenv('WOMPI_PUBLIC_KEY', 'pub_test_xxx')
+WOMPI_PRIVATE_KEY = os.getenv('WOMPI_PRIVATE_KEY', 'prv_test_xxx')
+WOMPI_ACCEPTANCE_TOKEN = os.getenv('WOMPI_ACCEPTANCE_TOKEN', '')
+
+# URL de retorno tras pago (ajusta según tu dominio)
+WOMPI_RETURN_URL = os.getenv('WOMPI_RETURN_URL', 'http://localhost:8000/')
+WOMPI_WEBHOOK_URL = os.getenv('WOMPI_WEBHOOK_URL', 'http://localhost:8000/api/payments/webhook/')
